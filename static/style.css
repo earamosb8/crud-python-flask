@@ -3,9 +3,19 @@
      margin:0px;
 }
 body{
-    background: #2193b0;  /* fallback for old browsers */
+    background-color: #EEEEEE;
+   /* background: #2193b0;  fallback for old browsers */
 
-}    
+}  
+nav{
+    background-color: #68829e ;
+} 
+img
+{
+    width: 220px;
+} 
+
+
 .section{
     display: flex;
     flex-wrap: wrap;

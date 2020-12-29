@@ -9,17 +9,16 @@ app = Flask(__name__)
 #mysql connection
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'password12345'
-app.config['MYSQL_DB'] = 'mundopc'
+app.config['MYSQL_PASSWORD'] = '12345'
+app.config['MYSQL_DB'] = 'solidnetwork'
 mysql = MySQL(app)
  # settings
 app.secret_key = 'mysecretkey'
 
-
 @app.route('/')
 def index():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM clientes")
+    cur.execute("SELECT * FROM cliente")
     data = cur.fetchall()
     print(data)
     """agregar cliente"""
@@ -34,16 +33,18 @@ def add():
         nombre = request.form['nombre']
         direccion = request.form['direccion']
         telefono = request.form['telefono']
+        correo = request.form['correo']
         print(cedula)
         print(nombre)
         print(telefono)
         print(direccion)
+        print(correo)
         """check fields before to execute sql sentence"""
         if cedula and nombre and telefono and direccion:
             try:
                 cur = mysql.connection.cursor()
-                cur.execute("INSERT INTO clientes (cedula, nombre, direccion, telefono) VALUES (%s, %s, %s, %s)",
-                (cedula, nombre, direccion, telefono))
+                cur.execute("INSERT INTO cliente (id, nombre, direccion, telefono, correo) VALUES (%s, %s, %s, %s,%s)",
+                (cedula, nombre, direccion, telefono, correo))
                 mysql.connection.commit()
                 flash('Cliente Agregado','confirmation')
                 return redirect(url_for('index'))
@@ -59,7 +60,7 @@ def add():
 def get_contact(cedula):
     """edit user"""
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM clientes WHERE cedula = {0}'.format(cedula))
+    cur.execute('SELECT * FROM cliente WHERE id = {0}'.format(cedula))
     data = cur.fetchall()
     print(data[0])
     return render_template('edit_contact.html', cliente = data[0])
@@ -71,16 +72,19 @@ def update_contact(cedula):
         nombre = request.form['nombre']
         direccion = request.form['direccion']
         telefono = request.form['telefono']
+        correo = request.form['correo']
+
         if cedula and nombre and telefono and direccion:
             try:
                 cur = mysql.connection.cursor()
                 cur.execute("""
-                UPDATE clientes
+                UPDATE cliente
                 SET nombre = %s,
-                direccion = %s,
-                telefono = %s
-                WHERE cedula = %s
-                """,(nombre, direccion, telefono, cedula))
+                    direccion = %s,
+                    telefono = %s,
+                    correo = %s
+                WHERE id = %s
+                """,(nombre, direccion, telefono, correo, cedula))
                 mysql.connection.commit()
                 flash('Cliente Actualizado','confirmation')
                 return redirect(url_for('index'))
@@ -97,10 +101,16 @@ def update_contact(cedula):
 def delete_contact(cedula):
     """eliminar cliente"""
     cur = mysql.connection.cursor()
-    cur.execute('DELETE FROM clientes WHERE cedula = {0}'.format(cedula))
+    cur.execute('DELETE FROM cliente WHERE id = {0}'.format(cedula))
     mysql.connection.commit()
     flash('Cliente Eliminado', 'confirmation')
     return redirect(url_for('index'))
+
+"""ruta de pagos"""
+@app.route('/pagos')
+def pago():
+    """agregar cliente"""
+    return render_template('pagos.html')
     
 
 if __name__ == '__main__':

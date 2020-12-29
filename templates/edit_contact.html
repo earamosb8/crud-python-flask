@@ -7,15 +7,19 @@
                 <form action="/update/{{cliente.0}} " method="POST"> 
                 <div class="form-group">   
                     <label for="nombre">Nombre</label> 
-                    <input type="text" name="nombre" placeholder="nombre completo" value='{{cliente.1}}' class="form-control" id="nombre" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');">
+                    <input type="text" name="nombre" placeholder="Nombre" value='{{cliente.1}}' class="form-control" id="nombre" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');">
                 </div>
                 <div class="form-group"> 
                     <label for="dir">Dirección</label> 
-                    <input type="text" name="direccion" placeholder="direccion" value='{{ cliente.2}}' class="form-control" id="dir" >
+                    <input type="text" name="direccion" placeholder="Direccion" value='{{ cliente.2}}' class="form-control" id="dir" >
                 </div>
                 <div class="form-group"> 
                     <label for="tel">Telefono</label> 
-                    <input type="text" name="telefono" placeholder="telefono" value='{{ cliente.3}}' class="form-control" id="tel" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false">
+                    <input type="text" name="telefono" placeholder="Telefono" value='{{ cliente.3}}' class="form-control" id="tel" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false">
+                </div>
+                <div class="form-group"> 
+                    <label for="cor">Correo</label> 
+                    <input type="text" name="correo" placeholder="Correo" value='{{ cliente.4}}' class="form-control" id="cor" >
                 </div>
                 <div class="form-group" >
                     <button type="submit" class="btn btn-success btn-block">Guardar</button>
