@@ -3,9 +3,12 @@ if(btnDelete){
     const btnArray = Array.from(btnDelete);
     btnArray.forEach((btn) =>{
         btn.addEventListener('click', (e) => {
-            if(!confirm('Estas seguro de querer eliminar este registro?')) {
+            if(!confirm('Estas seguro de querer eliminar este cliente ?')) {
                 e.preventDefault();
             }
         });
     });
 }
+
+
+

@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '12345'
-app.config['MYSQL_DB'] = 'solidnetwork'
+app.config['MYSQL_DB'] = 'solidn'
 mysql = MySQL(app)
  # settings
 app.secret_key = 'mysecretkey'
@@ -108,11 +108,57 @@ def delete_contact(cedula):
 
 """ruta de pagos"""
 @app.route('/pagos')
-def pago():
-    """agregar cliente"""
-    return render_template('pagos.html')
+def pagos():
+    """traer los clientes"""
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM cliente")
+    data = cur.fetchall()
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM pagos")
+    data_pagos = cur.fetchall()
+    print(data)
+    print(data_pagos)
+    
+    """renderiza clientes"""
+    return render_template('pagos.html', clientes = data, pagos = data_pagos)
+
+@app.route('/agregar_pago', methods=['POST'])
+def agregar_pago():
+    error = ""
+    """add user"""
+    if request.method == 'POST':
+        cedula = request.form['cedula']
+        mes = request.form['mes']
+        valor = request.form['valor']
+        print(cedula)
+        print(mes)
+        print(valor)
+        """check fields before to execute sql sentence"""
+        if cedula and mes and valor:
+            try:
+                cur = mysql.connection.cursor()
+                cur.execute("INSERT INTO pagos (id, fecha, valor) VALUES (%s, %s, %s)",
+                (cedula, mes, valor))
+                mysql.connection.commit()
+                flash('Cliente Agregado','confirmation')
+                return redirect(url_for('pagos'))
+            except MySQLdb.Error as e:
+                print(e)
+                flash("El Usuario con la "+ cedula + " no existe", 'error')
+                return redirect(url_for('pagos'))
+        else:
+            flash('Campos Vacios','error')
+            return redirect(url_for('pagos'))
+
+@app.route('/borrar_pago/<string:id>')
+def borrar_pago(id):
+    """eliminar cliente"""
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM pagos WHERE pago_id = {0}'.format(id))
+    mysql.connection.commit()
+    flash('Registro Eliminado', 'confirmation')
+    return redirect(url_for('pagos'))
     
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port = 7070, debug = True)
-  
+    app.run(host='0.0.0.0', port = 7070, debug = True)
