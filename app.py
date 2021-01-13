@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '12345'
-app.config['MYSQL_DB'] = 'solidn'
+app.config['MYSQL_DB'] = 'solidnetwork'
 mysql = MySQL(app)
  # settings
 app.secret_key = 'mysecretkey'
@@ -101,7 +101,9 @@ def update_contact(cedula):
 def delete_contact(cedula):
     """eliminar cliente"""
     cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM pagos WHERE id = {0}'.format(cedula))
     cur.execute('DELETE FROM cliente WHERE id = {0}'.format(cedula))
+    
     mysql.connection.commit()
     flash('Cliente Eliminado', 'confirmation')
     return redirect(url_for('index'))
@@ -109,18 +111,23 @@ def delete_contact(cedula):
 """ruta de pagos"""
 @app.route('/pagos')
 def pagos():
-    """traer los clientes"""
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM cliente")
-    data = cur.fetchall()
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM pagos")
-    data_pagos = cur.fetchall()
-    print(data)
-    print(data_pagos)
-    
-    """renderiza clientes"""
-    return render_template('pagos.html', clientes = data, pagos = data_pagos)
+    """traer pagos de un cliente especifico"""
+    if request.method == 'POST':
+        filter_id = request.form['filter_id']
+        print(filter_id)
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM pagos WHERE id = {0}'.format(filter_id))
+        data_filter = cur.fetchall()
+        return render_template('pagos.html',pagos = data_filter)
+
+    else:
+        """traer pagos de todos los clientes"""
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM pagos")
+        data_pagos = cur.fetchall()
+        print(data_pagos)
+        """renderiza clientes"""
+        return render_template('pagos.html',pagos = data_pagos)
 
 @app.route('/agregar_pago', methods=['POST'])
 def agregar_pago():
@@ -158,6 +165,19 @@ def borrar_pago(id):
     mysql.connection.commit()
     flash('Registro Eliminado', 'confirmation')
     return redirect(url_for('pagos'))
+
+@app.route('/filtrar_usuario' ,methods=['POST'])
+def filtrar():
+    """traer pagos de un cliente especifico"""
+    if request.method == 'POST':
+        filter_id = request.form['filter_id']
+        print(filter_id)
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM pagos WHERE id = {0}'.format(filter_id))
+        data_filter = cur.fetchall()
+        return render_template('pagos.html',pagos = data_filter)
+    
+  
     
 
 if __name__ == '__main__':
