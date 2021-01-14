@@ -17,19 +17,22 @@ CREATE TABLE cliente (
 
 
 CREATE TABLE pagos ( 
-        pago_id INT(20) UNSIGNED AUTO_INCREMENT,
+        pago_id BIGINT UNSIGNED AUTO_INCREMENT,
         id INT(20) UNSIGNED,
-        fecha VARCHAR(50) NOT NULL,
+        fecha date NOT NULL,
         valor INT(20) UNSIGNED,
         PRIMARY KEY (pago_id),
         FOREIGN KEY (id) REFERENCES cliente(id)
 )ENGINE=InnoDB;
 
-ALTER TABLE pagos 
-   ADD CONSTRAINT fk_anios
-   FOREIGN KEY (id) 
-   REFERENCES cliente(id);
+CREATE TABLE users (
+    user VARCHAR(50) NOT NULL,
+    pass VARCHAR(50) NOT NULL,
+    rol VARCHAR(2) NOT NULL,
+    PRIMARY KEY (user)
+);
 
+select * from pagos where id = 1062286458 order by fecha limit 4;
 --MOSTRAR TABLAS
 
 SHOW TABLES;

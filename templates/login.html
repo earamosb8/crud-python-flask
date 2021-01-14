@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}"">
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.css') }}"">
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"">
+    <title>SolidNetwork.Net</title>
+</head>
+<body>
+    
+    <div class="row">
+        
+        <div class="col-md-4 offset-md-4 mt-5">
+            <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+                <a class="navbar-brand" href="/">
+                  <img src={{ url_for('static', filename='img/logo.png') }} alt="logo">
+                </a>
+                <h1 class="text-center text-white font-weight-bold"> Login </h1>
+            </nav>
+            
+            <div class="card card-body">
+                <form action="/login_post " method="POST"> 
+                    <div class="form-group">   
+                        <input type="text" name="user" placeholder="User" class="form-control" id="user">
+                    </div>
+                    <div class="form-group">  
+                        <input type="password" name="password" placeholder="Password" class="form-control" id="password" >
+                    </div>
+                    <div class="form-group" >
+                        <button type="submit" class="btn btn-success btn-block">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>       
+</body>

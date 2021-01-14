@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
+from flask_login import LoginManager
 import MySQLdb
 
-
+loginmanager = LoginManager()
 
 
 app = Flask(__name__)
@@ -14,6 +15,15 @@ app.config['MYSQL_DB'] = 'solidnetwork'
 mysql = MySQL(app)
  # settings
 app.secret_key = 'mysecretkey'
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html', error=error)
+
+@app.errorhandler(500)
+def not_found(error):
+    return render_template('500.html', error=error)
 
 @app.route('/')
 def index():
@@ -109,7 +119,7 @@ def delete_contact(cedula):
     return redirect(url_for('index'))
 
 """ruta de pagos"""
-@app.route('/pagos')
+@app.route('/pagos', methods=['GET', 'POST'])
 def pagos():
     """traer pagos de un cliente especifico"""
     if request.method == 'POST':
@@ -118,8 +128,11 @@ def pagos():
         cur = mysql.connection.cursor()
         cur.execute('SELECT * FROM pagos WHERE id = {0}'.format(filter_id))
         data_filter = cur.fetchall()
-        return render_template('pagos.html',pagos = data_filter)
-
+        if  data_filter:
+            return render_template('pagos.html',pagos = data_filter)
+        else:
+            flash('El usuario no existe', 'not_found')
+            return redirect(url_for('pagos'))
     else:
         """traer pagos de todos los clientes"""
         cur = mysql.connection.cursor()
@@ -166,16 +179,24 @@ def borrar_pago(id):
     flash('Registro Eliminado', 'confirmation')
     return redirect(url_for('pagos'))
 
-@app.route('/filtrar_usuario' ,methods=['POST'])
-def filtrar():
-    """traer pagos de un cliente especifico"""
-    if request.method == 'POST':
-        filter_id = request.form['filter_id']
-        print(filter_id)
-        cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM pagos WHERE id = {0}'.format(filter_id))
-        data_filter = cur.fetchall()
-        return render_template('pagos.html',pagos = data_filter)
+@app.route('/editar_pago/<string:id>')
+def obtener_pago(id):
+    """edit user"""
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM pagos WHERE pago_id = {0}'.format(id))
+    data = cur.fetchall()
+    print(data[0])
+    return render_template('edit_pago.html', pago = data[0])
+
+
+@app.route('/login_post()', methods=['POST'])
+def login_post():
+    return redirect(url_for(login_post))
+
+@app.route('/login')
+def login():
+    
+    return render_template('login.html')
     
   
     

@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}"">
     <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.css') }}"">
     <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"">
-    <title>SolidNetwork.Net</title>
+    <title>
+      {% block title %}SolidNetwork.Net | {% endblock %}
+    </title>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
