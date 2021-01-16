@@ -2,3 +2,4 @@ pip install -r requirements.txt
 
 flask
 flask-mysqldb
+Flask-testing

@@ -32,7 +32,7 @@ CREATE TABLE users (
     PRIMARY KEY (user)
 );
 
-select * from pagos where id = 1062286458 order by fecha limit 4;
+select * from pagos where id = 23423 order by fecha limit 3;
 --MOSTRAR TABLAS
 
 SHOW TABLES;

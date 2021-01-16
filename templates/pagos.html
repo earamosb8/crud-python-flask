@@ -37,7 +37,7 @@
         {% endif %}
     {% endwith %}      
             <div class="card card-body mb-4 ">
-                <form action="/agregar_pago" method="POST">
+                <form action="/add_payment" method="POST">
                     <div class="form-group">
                         <input type="text" id = "cedula" required name="cedula" placeholder="cedula" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false">
                     </div>
@@ -55,7 +55,7 @@
     </div>
         <div class="col-lg-8">
             <div class="form-group">
-                <form action="/pagos" method="POST" class="form-inline">
+                <form action="/payments" method="POST" class="form-inline">
                     <div class="form-group">
                         <input type="text" id = "cedula" required name="filter_id" placeholder="cedula" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false">
                     </div>
@@ -94,8 +94,8 @@
                     <td>{{ pago.3 }}</td>
                    
                     <td>
-                        <a href='/editar_pago/{{ pago.0 }}' class="btn btn-secondary">Editar</a>
-                        <a href='/borrar_pago/{{ pago.0 }}' class="btn btn-danger btn-delete">Eliminar</a>
+                        <a href='/edit_payment/{{ pago.0 }}' class="btn btn-secondary">Editar</a>
+                        <a href='/delete_payment/{{ pago.0 }}' class="btn btn-danger btn-delete">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}

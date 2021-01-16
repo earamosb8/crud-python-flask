@@ -35,7 +35,7 @@
         {% endif %}
     {% endwith %}  
             <div class="card card-body mb-4 ">
-                <form action="/add_contact" method="POST">
+                <form action="/add_customers" method="POST">
                     <div class="form-group">
                         <input type="text" required name="cedula" placeholder="Cedula" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false">
                     </div>
@@ -79,8 +79,8 @@
                     <td>{{ cliente.4 }}</td>
                   
                     <td>
-                        <a href='/edit/{{ cliente.0 }}' class="btn btn-secondary">Editar</a>
-                        <a href='/delete/{{ cliente.0 }}' class="btn btn-danger btn-delete">Eliminar</a>
+                        <a href='/edit_customer/{{ cliente.0 }}' class="btn btn-secondary">Editar</a>
+                        <a href='/delete_customer/{{ cliente.0 }}' class="btn btn-danger btn-delete">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
