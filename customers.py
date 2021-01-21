@@ -53,20 +53,18 @@ def add():
             flash('Campos Vacios','error')
             return redirect(url_for('customers.list_customers'))
 
-@customers.route('/edit_customer/<string:cedula>')
+@customers.route('/edit_customer/<string:cedula>' , methods = ['GET','POST'])
 def get_contact(cedula):
     """edit user"""
     from app import app
     mysql = MySQL(app)
-    cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM cliente WHERE id = {0}'.format(cedula))
-    data = cur.fetchall()
-    print(data[0])
-    return render_template('edit_contact.html', cliente = data[0])
-
-@customers.route('/update_customer/<string:cedula>', methods = ['POST'])
-def update_contact(cedula):
-    """actualizar cliente"""
+    if request.method == 'GET':
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM cliente WHERE id = {0}'.format(cedula))
+        data = cur.fetchall()
+        print(data[0])
+        return render_template('edit_contact.html', cliente = data[0])
+    
     if request.method == 'POST':
         nombre = request.form['nombre']
         direccion = request.form['direccion']
@@ -96,6 +94,7 @@ def update_contact(cedula):
         else:
             flash('Hay Campos Vacios','error')
             return redirect(url_for('customers.list_customers'))
+    
         
 @customers.route('/delete_customer/<string:cedula>')
 def delete_contact(cedula):

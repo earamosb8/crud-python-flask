@@ -7,15 +7,15 @@
                 <form action=" " method="POST"> 
                 <div class="form-group">   
                     <label for="id">Cedula</label> 
-                    <input type="text" name="id" placeholder="id"  readonly  onmousedown="return false;" value='{{pago.1}}' class="form-control" id="id" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');">
+                    <input type="text" name="id" placeholder="id"  value='{{pago.1}}' class="form-control" id="id" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false">
                 </div>
                 <div class="form-group"> 
                     <label for="dir">Fecha</label> 
-                    <input type="date" name="mes" step="1" min="2020-01-01" max="2500-12-31" value='{{pago.2}}' >
+                    <input type="date" name="payment_date" step="1" min="2020-01-01" max="2500-12-31" value='{{pago.2}}' >
                 </div>
                 <div class="form-group"> 
                     <label for="pago">Pago</label> 
-                    <input type="text" name="valor" placeholder="valor" value='{{ pago.3}}' class="form-control" id="pago" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false">
+                    <input type="text" name="value" placeholder="valor" value='{{ pago.3}}' class="form-control" id="pago" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false">
                 </div>
                
                 <div class="form-group" >

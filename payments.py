@@ -79,13 +79,40 @@ def borrar_pago(id):
     flash('Registro Eliminado', 'confirmation')
     return redirect(url_for('payments.list'))
 
-@payments.route('/edit_payment/<string:id>')
+@payments.route('/edit_payment/<string:id>', methods=['GET', 'POST'])
 def obtener_pago(id):
-    """edit user"""
+    """edit payment"""
     from app import app
     mysql = MySQL(app)
-    cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM pagos WHERE pago_id = {0}'.format(id))
-    data = cur.fetchall()
-    print(data[0])
-    return render_template('edit_pago.html', pago = data[0])
+    if request.method == 'GET':
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM pagos WHERE pago_id = {0}'.format(id))
+        data = cur.fetchall()
+        print(data[0])
+        return render_template('edit_pago.html', pago = data[0])
+    
+    if request.method == 'POST':
+        id_value = request.form['id']
+        date_value = request.form['payment_date']
+        cost_value = request.form['value']
+        payment_id = id
+        if id_value and date_value and cost_value:
+            try:
+                cur = mysql.connection.cursor()
+                cur.execute("""
+                UPDATE pagos
+                SET id = %s,
+                    fecha = %s,
+                    valor = %s
+                WHERE pago_id = %s
+                """,(id_value, date_value, cost_value, payment_id))
+                mysql.connection.commit()
+                flash('Pago Actualizado','confirmation')
+                return redirect(url_for('payments.list'))
+            except MySQLdb.Error as e:
+                print(e)
+                flash("No se pudo actualizar el pago", 'error')
+                return redirect(url_for('payments.list'))
+        else:
+            flash('Hay Campos Vacios','error')
+            return redirect(url_for('payments.list'))
