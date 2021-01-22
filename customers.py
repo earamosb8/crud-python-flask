@@ -1,9 +1,13 @@
 from flask import Blueprint
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash , make_response
 from flask_mysqldb import MySQL
 from flask_login import LoginManager
 import MySQLdb
 import unittest
+import pdfkit
+path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+
 
 
 customers = Blueprint('customers', __name__)
@@ -109,3 +113,23 @@ def delete_contact(cedula):
     flash('Cliente Eliminado', 'confirmation')
     return redirect(url_for('customers.list_customers'))
 
+@customers.route('/print_customers')
+def print_customers():
+    options = {
+        "enable-local-file-access": None
+    }
+    from app import app
+    mysql = MySQL(app)
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM cliente")
+    data = cur.fetchall()
+    rendered = render_template('print.html', clientes = data)
+    pdf = pdfkit.from_string(rendered, False, configuration=config, options = options)
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline;filename=output.pdf'
+    return response
+
+
+    
+    

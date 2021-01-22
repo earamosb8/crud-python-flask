@@ -5,6 +5,7 @@ import MySQLdb
 import unittest
 from customers import customers
 from payments import payments
+import pdfkit
 
 
 loginmanager = LoginManager()
@@ -13,6 +14,7 @@ loginmanager = LoginManager()
 app = Flask(__name__)
 app.register_blueprint(customers)
 app.register_blueprint(payments)
+
 
 #mysql connection
 app.config['MYSQL_HOST'] = 'localhost'
@@ -51,7 +53,7 @@ def login():
     
     return render_template('login.html')
     
-  
+
     
 
 if __name__ == '__main__':
