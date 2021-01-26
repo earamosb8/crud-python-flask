@@ -1,7 +1,6 @@
 from flask import Blueprint
-from flask import Flask, render_template, request, redirect, url_for, flash , make_response
+from flask import Flask, render_template, request, redirect, url_for, flash , make_response, session
 from flask_mysqldb import MySQL
-from flask_login import LoginManager
 import MySQLdb
 import unittest
 import pdfkit
@@ -12,16 +11,27 @@ config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
 customers = Blueprint('customers', __name__)
 
-@customers.route('/')
+@customers.route('/customers')
 def list_customers():
-    from app import app
-    mysql = MySQL(app)
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM cliente")
-    data = cur.fetchall()
-    print(data)
-    """agregar cliente"""
-    return render_template('index.html', clientes = data)
+    us = None
+    if 'username' in session:
+        us = session['username']
+    if us:
+        try:
+            from app import app
+            mysql = MySQL(app)
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT * FROM cliente")
+            data = cur.fetchall()
+            print(data)
+            """agregar cliente"""
+            return render_template('index.html', clientes = data, rol = session['rol'])
+        except MySQLdb.Error as e:
+            print(e)
+            return render_template('no_conexion.html',error=e)
+    else:
+        return render_template('no_conexion.html',error="Debes iniciar sesion")
+    
 
 @customers.route('/add_customers', methods=['POST'])
 def add():
@@ -51,8 +61,7 @@ def add():
                 return redirect(url_for('customers.list_customers'))
             except MySQLdb.Error as e:
                 print(e)
-                flash("El Usuario con la "+ cedula + " ya existe", 'error')
-                return redirect(url_for('customers.list_customers'))
+                return render_template('no_conexion.html',error=e)
         else:
             flash('Campos Vacios','error')
             return redirect(url_for('customers.list_customers'))
@@ -93,8 +102,7 @@ def get_contact(cedula):
                 return redirect(url_for('customers.list_customers'))
             except MySQLdb.Error as e:
                 print(e)
-                flash("No se pudo actualizar el usuario", 'error')
-                return redirect(url_for('customers.list_customers'))
+                return render_template('no_conexion.html',error=e)
         else:
             flash('Hay Campos Vacios','error')
             return redirect(url_for('customers.list_customers'))
@@ -103,32 +111,40 @@ def get_contact(cedula):
 @customers.route('/delete_customer/<string:cedula>')
 def delete_contact(cedula):
     """eliminar cliente"""
-    from app import app
-    mysql = MySQL(app)
-    cur = mysql.connection.cursor()
-    cur.execute('DELETE FROM pagos WHERE id = {0}'.format(cedula))
-    cur.execute('DELETE FROM cliente WHERE id = {0}'.format(cedula))
-    
-    mysql.connection.commit()
-    flash('Cliente Eliminado', 'confirmation')
-    return redirect(url_for('customers.list_customers'))
+    try:
+        from app import app
+        mysql = MySQL(app)
+        cur = mysql.connection.cursor()
+        cur.execute('DELETE FROM pagos WHERE id = {0}'.format(cedula))
+        cur.execute('DELETE FROM cliente WHERE id = {0}'.format(cedula))
+        mysql.connection.commit()
+        flash('Cliente Eliminado', 'confirmation')
+        return redirect(url_for('customers.list_customers'))
+    except MySQLdb.Error as e:
+        print(e)
+        return render_template('no_conexion.html',error=e)
+        
 
 @customers.route('/print_customers')
 def print_customers():
     options = {
         "enable-local-file-access": None
     }
-    from app import app
-    mysql = MySQL(app)
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM cliente")
-    data = cur.fetchall()
-    rendered = render_template('print.html', clientes = data)
-    pdf = pdfkit.from_string(rendered, False, configuration=config, options = options)
-    response = make_response(pdf)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline;filename=output.pdf'
-    return response
+    try:
+        from app import app
+        mysql = MySQL(app)
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM cliente")
+        data = cur.fetchall()
+        rendered = render_template('print.html', clientes = data)
+        pdf = pdfkit.from_string(rendered, False, configuration=config, options = options)
+        response = make_response(pdf)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = 'inline;filename=clientes.pdf'
+        return response
+    except MySQLdb.Error as e:
+        print(e)
+        return render_template('no_conexion.html',error=e)
 
 
     

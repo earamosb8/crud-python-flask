@@ -6,7 +6,7 @@ use solidnetwork;
 
 --create table cliente
 
-CREATE TABLE cliente (
+CREATE TABLE IF NOT EXISTS cliente (
     id INT(20) UNSIGNED,
     nombre VARCHAR(50) NOT NULL,
     direccion VARCHAR(100) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE cliente (
 ) ENGINE=InnoDB;
 
 
-CREATE TABLE pagos ( 
+CREATE TABLE IF NOT EXISTS pagos ( 
         pago_id BIGINT UNSIGNED AUTO_INCREMENT,
         id INT(20) UNSIGNED,
         fecha date NOT NULL,
@@ -25,7 +25,8 @@ CREATE TABLE pagos (
         FOREIGN KEY (id) REFERENCES cliente(id)
 )ENGINE=InnoDB;
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
+    id INT(3) UNSIGNED UNIQUE,
     user VARCHAR(50) NOT NULL,
     pass VARCHAR(50) NOT NULL,
     rol VARCHAR(2) NOT NULL,
@@ -40,3 +41,5 @@ SHOW TABLES;
 --DESCRIBIR LA TABLA
 
 describe cliente;
+
+INSERT INTO users VALUES(1, 'solu',SHA1('12345'), 1);

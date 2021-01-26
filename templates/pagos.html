@@ -87,18 +87,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for pago in pagos%}
-                <tr>
-                    <td>{{ pago.1 }}</td>
-                    <td>{{ pago.2 }}</td>
-                    <td>{{ pago.3 }}</td>
-                   
+                {% if rol == '1' %} 
+                    {% for pago in pagos%}
+                    <tr>
+                        <td>{{ pago.1 }}</td>
+                        <td>{{ pago.2 }}</td>
+                        <td>{{ pago.3 }}</td>
                     <td>
                         <a href='/edit_payment/{{ pago.0 }}' class="btn btn-secondary">Editar</a>
                         <a href='/delete_payment/{{ pago.0 }}' class="btn btn-danger btn-delete">Eliminar</a>
                     </td>
-                </tr>
-            {% endfor %}
+                    </tr>
+                    {% endfor %}
+                {% elif rol == '2' %} 
+                    {% for pago in pagos%}
+                    <tr>
+                        <td>{{ pago.1 }}</td>
+                        <td>{{ pago.2 }}</td>
+                        <td>{{ pago.3 }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            
             </tbody>
             </table>
         </div>

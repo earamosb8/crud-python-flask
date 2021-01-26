@@ -55,7 +55,7 @@
                         <button type="submit" class="btn btn-primary btn-block form-control ">Guardar</button>
                     </div>
                 </form>
-        </div>
+            </div>
     </div>
         <div class="col-lg-8">
             <table class="table table-striped table-hover table-bordered table-sm bg-white">
@@ -70,30 +70,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for cliente in clientes%}
-                <tr>
-                    <td>{{ cliente.0 }}</td>
-                    <td>{{ cliente.1 }}</td>
-                    <td>{{ cliente.2 }}</td>
-                    <td>{{ cliente.3 }}</td>
-                    <td>{{ cliente.4 }}</td>
-                  
-                    <td>
-                        <a href='/edit_customer/{{ cliente.0 }}' class="btn btn-secondary">Editar</a>
-                        <a href='/delete_customer/{{ cliente.0 }}' class="btn btn-danger btn-delete">Eliminar</a>
-                    </td>
-                </tr>
-            {% endfor %}
+                {% if rol == "1" %}
+                    {% for cliente in clientes%}
+                    <tr>
+                        <td>{{ cliente.0 }}</td>
+                        <td>{{ cliente.1 }}</td>
+                        <td>{{ cliente.2 }}</td>
+                        <td>{{ cliente.3 }}</td>
+                        <td>{{ cliente.4 }}</td>
+                        <td>
+                            <a href='/edit_customer/{{ cliente.0 }}' class="btn btn-secondary">Editar</a>
+                            <a href='/delete_customer/{{ cliente.0 }}' class="btn btn-danger btn-delete">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% elif rol == "2" %}
+                    {% for cliente in clientes%}
+                    <tr>
+                        <td>{{ cliente.0 }}</td>
+                        <td>{{ cliente.1 }}</td>
+                        <td>{{ cliente.2 }}</td>
+                        <td>{{ cliente.3 }}</td>
+                        <td>{{ cliente.4 }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
             </tbody>
             </table>
-            <form action="/print_customers">
-                <div class="form-group col-2">
-                    <button type="submit" class="btn btn-primary btn-block form-control ">PRINT</button>
-                </div>
-            </form>
+                <form action="/print_customers" class="col-5 col-lg-2">
+                
+                    <div class="form-group  ">
+                        <button type="submit" class="btn btn-primary btn-block form-control ">PRINT</button>
+                    </div>
+                </form>
         </div>
        
     </div>  
     </div>
+   <h1>{{rol}}</h1> 
 
 {% endblock %}

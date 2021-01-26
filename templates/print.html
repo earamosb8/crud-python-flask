@@ -1,12 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Customers</title>
+    <style>
+        h1{
+            text-align: center;
+            font-family: sans-serif;
+        }
+        table{
+            margin: auto;
+            border: solid 1px;
+            font-family: sans-serif;
+        }
+        td{
+            text-align: center;
 
-    <table style="border: solid;">
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <h1>Clientes</h1>
         <thead>
             <tr>
-                <td>Cedula</td>
-                <td>Nombre</td>
-                <td>Direccion</td>
-                <td>Telefono</td>
-                <td>Correo</td>
+                <td><h2>Cedula</h2></td>
+                <td><h2>Nombre</h2></td>
+                <td><h2>Direccion</h2></td>
+                <td><h2>Telefono</h2></td>
+                <td><h2>Correo</h2></td>
             </tr>
         </thead>
         <tbody>
@@ -21,3 +44,5 @@
     {% endfor %}
     </tbody>
     </table>
+</body>
+</html>

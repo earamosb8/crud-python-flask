@@ -1,7 +1,6 @@
 from flask import Blueprint
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
-from flask_login import LoginManager
 import MySQLdb
 import unittest
 
@@ -11,29 +10,35 @@ payments = Blueprint('payments', __name__)
 @payments.route('/payments', methods=['GET', 'POST'])
 def list():
     """traer pagos de un cliente especifico"""
-    if request.method == 'POST':
-        filter_id = request.form['filter_id']
-        print(filter_id)
-        from app import app
-        mysql = MySQL(app)
-        cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM pagos WHERE id = {0}'.format(filter_id))
-        data_filter = cur.fetchall()
-        if  data_filter:
-            return render_template('pagos.html',pagos = data_filter)
-        else:
-            flash('El usuario no existe', 'not_found')
-            return redirect(url_for('payments.list'))
+    us = None
+    if 'username' in session:
+        us = session['username']
+        if us:
+            if request.method == 'POST':
+                filter_id = request.form['filter_id']
+                print(filter_id)
+                from app import app
+                mysql = MySQL(app)
+                cur = mysql.connection.cursor()
+                cur.execute('SELECT * FROM pagos WHERE id = {0}'.format(filter_id))
+                data_filter = cur.fetchall()
+                if  data_filter:
+                    return render_template('pagos.html',pagos = data_filter , rol=session['rol'])
+                else:
+                    flash('El usuario no existe', 'not_found')
+                    return redirect(url_for('payments.list'))
+            if request.method == 'GET':
+                """traer pagos de todos los clientes"""
+                from app import app
+                mysql = MySQL(app)
+                cur = mysql.connection.cursor()
+                cur.execute("SELECT * FROM pagos")
+                data_pagos = cur.fetchall()
+                print(data_pagos)
+                """renderiza clientes"""
+                return render_template('pagos.html',pagos = data_pagos, rol=session['rol'])
     else:
-        """traer pagos de todos los clientes"""
-        from app import app
-        mysql = MySQL(app)
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM pagos")
-        data_pagos = cur.fetchall()
-        print(data_pagos)
-        """renderiza clientes"""
-        return render_template('pagos.html',pagos = data_pagos)        
+        return render_template('no_conexion.html',error="Debes iniciar sesion")      
 
 
 
