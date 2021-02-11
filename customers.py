@@ -37,7 +37,6 @@ def list_customers():
 def add():
     from app import app
     mysql = MySQL(app)
-    error = ""
     """add user"""
     if request.method == 'POST':
         cedula = request.form['cedula']

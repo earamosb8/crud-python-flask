@@ -1,0 +1,21 @@
+{% extends 'layout.html'%}
+{% block title %}
+        {{ super() }} 
+            Clientes 
+{% endblock %} 
+{% block body %}
+<div class= "container-fluid">
+    <div class="row"> 
+        <h1 class="text-center mt-3 text-black font-weight-bold mx-auto col-12"> Mantenimiento </h1>
+        <p class="text-center mx-auto col-12">recuerde que al realizar el mantenimiento se eliminara todos los datos registrados de la tabla pagos</p>
+        <form action="{{ url_for('maintenance.view_maintenance') }}" class=" col-12 text-center" method="POST"> 
+            <button type="submit" class="btn btn-danger btn-lg ">Eliminar</button>
+        </form>
+        <p class="text-center mx-auto col-12">{{msj}}</p>
+
+    <div>
+        <h1>{{rol}}</h1>
+</div>
+
+    
+{% endblock %}

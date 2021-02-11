@@ -26,6 +26,11 @@
         <li class="nav-item">
           <a class="nav-link text-white " href="/payments">Pagos</a>
         </li>
+        {% if rol == "1" %}
+          <li class="nav-item">
+            <a class="nav-link text-white " href="/maintenance">Mantenimiento</a>
+          </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link text-white " href="/logout">Salir</a>
         </li>

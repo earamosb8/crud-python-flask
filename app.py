@@ -5,6 +5,7 @@ import MySQLdb
 import unittest
 from customers import customers
 from payments import payments
+from maintenance import maintenance
 import pdfkit
 import hashlib
 
@@ -14,6 +15,7 @@ import hashlib
 app = Flask(__name__)
 app.register_blueprint(customers)
 app.register_blueprint(payments)
+app.register_blueprint(maintenance)
 
 
 
